@@ -1,0 +1,9 @@
+# file: wfdbcal			G. Moody		9 January 2014
+#
+# Supplementary calibration database for the CTU-UHB Intrapartum CTG Database
+#
+# See http://physionet.org/physiobank/database/wfdbcal (the default calibration
+# database) for format details.
+
+FHR	0 - undefined 20 bpm
+UC	- - undefined 50 nd

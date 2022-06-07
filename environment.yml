@@ -1,0 +1,18 @@
+name: ctg
+channels:
+  - defaults
+  - conda-forge 
+dependencies:
+  - jupyter
+  - jupyterlab
+  - matplotlib=3.4
+  - numpy
+  - pandas
+  - pip
+  - python=3.8
+  - scikit-learn
+  - pip:
+    - optuna
+    - wfdb
+    - tensorflow
+
