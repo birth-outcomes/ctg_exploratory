@@ -44,7 +44,7 @@ Additional parameters were collected for all recordings, and are available in th
 * Fetal outcome data: analysis of umbilical artery blood sample (i.e. pH; pCO2; pO2; base excess and computed BDecf); Apgar score; neonatology evaluation (i.e. need for O2; seizures; admission to NICU)
 * Expert evaluation of the CTG data "Gold Standard" evaluation based on annotation of the signals by 9 expert obstetricians (following FIGO guidelines used in the Czech Republic) including variability/confidence for each signal (Note: these data are not yet available!)
 
-## Lisence info
+## License info
 
 Open Data Commons Attribution License v1.0 
 
@@ -52,4 +52,8 @@ https://physionet.org/content/ctu-uhb-ctgdb/view-license/1.0.0/
 
 https://opendatacommons.org/licenses/by/index.html
 
+## Annotations dataset
 
+A proposed dataset with annotations for the 552 CTG recordings is provided by [Romagnoli et al. 2020](https://doi.org/10.1016/j.dib.2020.105690). The file "ANNOTATIONS" from the PhysioNet download is empty. This dataset of annotations is available as supplementary materials of their paper, as MATLAB data files (.mat).
+
+Their paper was published under CC BY-NC-ND 4.0 DEED, under which you are free to share materials (not clear on what the reuse allowance is). However, the paper is stating that the database only contains traces so through adding annotations, it supports technical developments, and can support development, testing and comparison of algorithms for analysis of the CTG recordings.
