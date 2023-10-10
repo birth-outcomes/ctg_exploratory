@@ -11,9 +11,9 @@ dependencies:
   - pip
   - python=3.10
   - scikit-learn
-  - sktime
   - pip:
     - optuna
     - pydot
     - tensorflow[and-cuda]
     - wfdb
+    - sktime
