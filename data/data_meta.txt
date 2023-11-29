@@ -1,0 +1,50 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Template file just to demonstrate possible values of different parameters used in the *.hea files
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+
+% File header is used to read the corresponding *.dat file 
+
+XYZ 2 4 19200
+XYZ.dat 16 1 12 0 143 2471 0 FHR
+XYZ.dat 16 1 12 0 4 11028 0 UC
+
+#----- Aditional parameters for record XYZ
+
+#-- Outcome measures (please refer to the text for details) 
+#pH           7.16   	: Umbilical cord artery pH 
+#BDecf        1.93   	: Umbilical cord artery Base Deficit in extraceluar fluid
+#pCO2         9.8    	: Partial pressure of CO2
+#BE           -4.6   	: BaseExcess
+#Apgar1       9      	: Apgar in the first minute
+#Apgar5       9      	: Apgar in the fifth minute
+
+#-- Fetus/Neonate descriptors
+#Gest. weeks  41     	: number of finished weeks of gestation
+#Weight(g)    4070   	: birth weight in grams
+#Sex          2      	: 1-female; 2-male
+
+#-- Maternal (risk-)factors
+#Age          28 	: maternal age in time of delivery
+#Gravidity    1  	: number of grav. including current one
+#Parity       0  	: number of previous deliveries 
+#Diabetes     0	 	: risk factor (0-no; 1-yes)
+#Hypertension 0	 	: risk factor (0-no; 1-yes)
+#Preeclampsia 0	 	: risk factor (0-no; 1-yes)
+#Liq. praecox 0	 	: risk factor (0-no; 1-yes)
+#Fever        0	 	: risk factor (0-no; 1-yes)
+#Meconium     1  	: risk factor (0-no; 1-yes)
+
+#-- Delivery descriptors
+#Presentation 1		: Presentation of the fetus (1-normal???; 2-breech;3-other) 
+#Induced      1		: Induction of delivery (0-no; 1-yes)
+#I.stage      225 	: Total length of the 1st stage
+#NoProgress   0 	: Delivery without progress as indicated by obstetrician
+#CK/KP        0 	: Possible reason behind no-progress - CervicoKorporal or KefaloPelvina disproportion
+#II.stage     20 	: Length of 2nd stage in minutes (if -1 there is was no 2nd stage)
+#Deliv. type  1 	: Type of delivery (1-Vaginal; 2-CS;) 
+
+#-- Signal information
+#dbID         1112241 	: Database ID of the record (for internal use only)
+#Rec. type    2		: Type of recording 1-USG; 2-FECG; 12-Combined USG+FECG 
+#Pos. II.st.  14400 	: Position of 2nd stage in samples from the begining of the signal (if -1 there is was no 2nd stage)
+#Sig2Birth    1 	: Distance of last sample of the signal from birth in minutes.
