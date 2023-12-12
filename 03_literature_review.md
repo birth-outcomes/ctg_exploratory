@@ -91,6 +91,24 @@ There are other monitoring techniques like fetal ECG. Examples of publicly avail
 * The Fetal ECG Synthetic Database (FECGSYNDB)
 * The Non-invasive Fetal ECG Arrhythmia Database (NIFEADB) 
 
+## Studies evaluating the use of CTG analysis systems in clinical practice
+
+Several of the automated analysis methods have been developed as commercial products and evaluated in clinical practice. These are decision-support systems which provide alerts when there are concerns.[[source]](https://doi.org/10.3390/bioengineering10091007)
+
+There are some systems for monitoring during labour (antenatal) (e.g. System 8000 (Dawes and Redman) and improved version called sonicadFetalCare; 2CTG2). For monitoring during labour, systems include:
+* **Porto** (based on FIGO), later commercialised **SisPorto** and **Omniview-SisPorto**, and the latest version is **Sis-Porto 4.0** (based on 2015 FIGO guidelines) - as described in [Ayres-de-Campos et al. 2017](https://doi.org/10.3109/14767058.2016.1161750)
+* **INFANT** (K2 Medical Systems, Plymouth, UK) - as described in [this Lancet publication](https://doi.org/10.1016%2FS0140-6736(17)30568-8), although note that the co-inventor of INFANT, co-founder of K2 Medical Systems, and member of authorship and Clinical Investigator's group resigned as author from the paper [as in this commentary](https://doi.org/10.1016/S0140-6736(17)30714-6)
+* **OxSys** is a new prototype that analyses and triggers 
+
+Most of these systems have undergone years of work, testing and clinicial validation in randomised controlled trials (RCTs). Description of some of the studies, as from [[source]](https://doi.org/10.3390/bioengineering10091007):
+| Software | Study design | Sample size | Outcome |
+| --- | --- | --- | --- |
+| INFANT | RCT | 46042 | **No difference**. Incidence of poor neonatal outcomes was the same regardless of using the decision support system, 0.7% in both groups (adjusted risk ratio 1.01, 95% CI:0.82–1.25) |
+| Omniview-SisPorto 3.5 | RCT | 7730 | **No difference**. While both study arms reported lower than expected rate of newborn metabolic acidosis, no significant reduction in the metabolic rate or obstetric intervention was achieved using computerised analysis (relative risk 0.69, 95% CI:0.36–1.31) |
+| OxSys 1.5 | Retrospective | 22790 | **Sensitivity change not stat sig, FPR change was**. OxSys system potentially increased the sensitivity of fetal compromise detection (43.3% vs. 38.0% for severe, p = 0.3 and 36.1% vs. 31.0% for moderate, p = 0.06) while reducing the false positive rate (14.4% vs. 16.3%, p < 0.001) compared to conventional clinical diagnosis; however, the sensitivity increase was not statistically significant.|
+
+Two recent **meta-analyses** also concluded similar findings that **computerised CTG analysis did not improve neonatal outcomes compared to conventional evaluation**.[[source]](https://doi.org/10.3390/bioengineering10091007)
+
 ## Methods using human-guided features (e.g. PICO guidelines acceleration, deceleration) of the signals (either papers focusing on producing the features, or also doing classification)
 
 | Paper | Dataset | Signal cleaning | Signal segmentation | Feature extraction | Feature selection | Outcome | Imbalance | Model | Reproducibility? |
