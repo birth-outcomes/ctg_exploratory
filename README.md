@@ -85,7 +85,9 @@ Source: https://github.com/utsb-fmm/FHRMA/tree/master
 
 License: GPL-3.0
 
-The dataset contains 155 FHR recordings in which a reference baseline, accelerations and decelerations have been annotated by expert consensus. 66 FHR recordings with a shared expert analysis have been included in a training dataset, and 90 other FHR recordings with a non-shared expert analysis have been included in an evaluation dataset. Researchers wishing to evaluate their automatic analysis method should submit their results for comparison with the expert consensus. The dataset also contains the results produced by 12 re-coded automatic analysis methods from the literature. The baseline, accelerations, decelerations, and over-shoots are not publicly shared for the recordings in the evaluation dataset to avoid any training on those data.
+The dataset contains 155 FHR recordings in which a reference baseline, accelerations and decelerations have been annotated by expert consensus. 66 FHR recordings with a shared expert analysis have been included in a training dataset, and 90 other FHR recordings with a non-shared expert analysis have been included in an evaluation dataset. *Note: think this is referring to the training and test - with the evaluation not provided as below*. The dataset also contains the results produced by 12 re-coded automatic analysis methods from the literature.
+
+Researchers wishing to evaluate their automatic analysis method should submit their results for comparison with the expert consensus. The baseline, accelerations, decelerations, and over-shoots are not publicly shared for the recordings in the evaluation dataset to avoid any training on those data.
 
 Main information are published in : [1] Boudet, S., Houzé de l’Aulnoit, A., Demailly, R., Delgranche, A., Peyrodie, L., Beuscart, R., Houzé de l’Aulnoit,D. - Fetal heart rate signal dataset for training morphological analysis methods and evaluating them against an expert consensus. Preprints pp. Submitted to data in brief,2019, DOI:10.20944/preprints201907.0039.v1
 
