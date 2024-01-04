@@ -1,7 +1,7 @@
 clear;
 
 % Set filename
-filename='test02';
+filename='train_test_data/testdata_fhr/test01';
 
 % Open file
 f=fopen([filename, '.fhr'], 'r');
