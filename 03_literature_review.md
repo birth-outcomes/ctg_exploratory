@@ -91,6 +91,21 @@ There are other monitoring techniques like fetal ECG. Examples of publicly avail
 * The Fetal ECG Synthetic Database (FECGSYNDB)
 * The Non-invasive Fetal ECG Arrhythmia Database (NIFEADB) 
 
+## Antenatal analysis
+
+The development of antepartum computerized CTG (cCTG) began in 1978 based on criteria devised by Geoffrey Dawes and Chris Redman (Dawes–Redman criteria). Since then, the algorithm has been upgraded and improved repeatedly, and is now reportedly based on approximately 100 000 CTG traces linked to clinical outcome data spanning 20 years. The main advantage of cCTG with Dawes–Redman criteria over ‘conventional’ CTG is that it expresses components of the fetal heart rate (FHR) in an objective and numerically quantifiable way. This has led to cCTG being adopted as the recommended tool for antepartum monitoring over CTG in the UK by the NHS Saving Babies' Lives Care Bundle (SBLCBv2).[[source]](https://obgyn.onlinelibrary.wiley.com/doi/10.1002/uog.26198 )
+
+The computation of the Dawes–Redman criteria remains proprietary knowledge. Minimum duration of fetal monitoring is 10 min; analysis is performed at 10 min and every 2 min thereafter, up to a maximum of 60 min. In the presence of sufficient elements to be classified as normal (i.e. ‘criteria met’), monitoring can be stopped. The main components are:
+
+![Dawes-Redman criteria](./images/dawes-redman.jpg)
+
+[[source]](https://obgyn.onlinelibrary.wiley.com/doi/10.1002/uog.26198 )
+
+The Dawes-Redman analysis cannot be used in the presence of uterine contractions as this can be falsely reassuring.
+
+It was commercialised as the Huntleigh Healthcare Ltd Sonicaid FM800. “Huntleigh are the exclusive worldwide distributor (under the licence from Oxford University) for the genuine Dawes-Redman analysis developed by Dawes, Redman et al, at the University of Oxford. Products produced by other companies will not have been validated against the University of Oxford’s unique database (where the system was and continues to be developed) and therefore will not perform in the same way.”[[source]](https://www.huntleigh-diagnostics.com/sonicaid-dawes-redman-ctg-analysis)
+
+
 ## Studies evaluating the use of CTG analysis systems in clinical practice
 
 Several of the automated analysis methods have been developed as commercial products and evaluated in clinical practice. These are decision-support systems which provide alerts when there are concerns.[[source]](https://doi.org/10.3390/bioengineering10091007)
