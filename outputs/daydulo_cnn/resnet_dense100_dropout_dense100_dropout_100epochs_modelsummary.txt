@@ -1,0 +1,21 @@
+Model: "sequential"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ resnet50 (Functional)       (None, 2048)              23587712  
+                                                                 
+ dense (Dense)               (None, 100)               204900    
+                                                                 
+ dropout (Dropout)           (None, 100)               0         
+                                                                 
+ dense_1 (Dense)             (None, 100)               10100     
+                                                                 
+ dropout_1 (Dropout)         (None, 100)               0         
+                                                                 
+ dense_2 (Dense)             (None, 1)                 101       
+                                                                 
+=================================================================
+Total params: 23802813 (90.80 MB)
+Trainable params: 215101 (840.24 KB)
+Non-trainable params: 23587712 (89.98 MB)
+_________________________________________________________________
