@@ -10,7 +10,7 @@ clear;
 % -----------------------------------------------------------------------------
 
 % Set filename
-filename='train_test_data/traindata_fhr/train01';
+filename='train_test_data/traindata_fhr/train28';
 
 % Open file
 f=fopen([filename, '.fhr'], 'r');
@@ -39,7 +39,11 @@ end
 sFHR=avgsubsamp(FHR,8);
 baseline=zeros(1,length(FHR));
 
+% For loop of values of 0, 150, 300, 450...
 for win=[0:150:length(sFHR)-151 length(sFHR)-150]
+
+    % Not used, just extracted to support comparison to Python results
+    current = sFHR(win+1:win+150)
 
     bins=zeros(1,25);
 
@@ -62,4 +66,4 @@ baseline(win*8+1201:length(FHR))=baseline(win*8+1200);
 d = [true, diff(baseline) ~= 0, true]; % TRUE if values change
 n = diff(find(d)); % Number of repetitions
 d(end) = []; % Remove last element so matches dimensions
-reshape([baseline(d) n], 7, 2) % Combine into 2D array to show result
+reshape([baseline(d) n], 4, 2) % Combine into 2D array to show result
