@@ -10,7 +10,7 @@ clear;
 % -----------------------------------------------------------------------------
 
 % Set filename
-filename='train_test_data/traindata_fhr/train28';
+filename='train_test_data/traindata_fhr/train42';
 
 % Open file
 f=fopen([filename, '.fhr'], 'r');
@@ -42,8 +42,9 @@ baseline=zeros(1,length(FHR));
 % For loop of values of 0, 150, 300, 450...
 for win=[0:150:length(sFHR)-151 length(sFHR)-150]
 
+    % disp(win)
     % Not used, just extracted to support comparison to Python results
-    current = sFHR(win+1:win+150)
+    % current = sFHR(win+1:win+150)
 
     bins=zeros(1,25);
 
