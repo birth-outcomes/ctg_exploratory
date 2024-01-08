@@ -21,20 +21,89 @@ timestamp=fread(f,1,'uint32');
 % Load FHR data - first corresponds to first sensor, and
 % second corresponds to second sensor (which they don't use)
 data=fread(f,[3,10000000],'uint16');
-FHR=data(1,:)/4;
+FHR1=data(1,:)/4;
+FHR2=data(2,:)/4;
 
 % Close the file
 fclose(f);
 
 % -----------------------------------------------------------------------------
+% Pre-process
+% -----------------------------------------------------------------------------
+
+function FHR=removesmallpart(FHR)
+    FHR(FHR>220|FHR<50)=0;
+    n=find(FHR(1:end-1)==0 & FHR(2:end)>0)+1;
+    for i=1:length(n)
+        f=find(FHR(n(i):end)==0,1,'first');
+        if f<5*4
+        	FHR(n(i):n(i)+f)=0;
+        end
+    end
+    n=find(FHR(1:end-1)==0 & FHR(2:end)>0)+1;
+    for i=1:length(n)
+        f=find(FHR(n(i):end)==0,1,'first');
+        if f<30*4
+
+            lastvalid=find(FHR(1:n(i)-1)>0,1,'last');
+            nextvalid=find(FHR(n(i)+f:end)>0,1,'first')+n(i)+f-1;
+
+            try
+                if(  (FHR(n(i))-FHR(lastvalid)<-25 && FHR(n(i)+f-2)-FHR(nextvalid)<-25 ))
+                    FHR(n(i):n(i)+f)=0;
+                end
+                if(  (FHR(n(i))-FHR(lastvalid)>25 && FHR(n(i)+f-2)-FHR(nextvalid)>25 ))
+                    FHR(n(i):n(i)+f)=0;
+                end
+            catch
+            end
+        end
+    end
+
+end
+
+
+function [FHR,d,f]=interpolFHR(FHR)
+    n=find(FHR>0 & ~isnan(FHR),1);
+    FHR(1:n)=FHR(n);
+    d=n;
+    while ~isempty(n) && n<length(FHR)
+        n=find(FHR(n:end)==0|isnan(FHR(n:end)),1)+n-1;
+        nf=find(FHR(n:end)>0&~isnan(FHR(n:end)),1)+n-1;
+        if(~isempty(nf))
+            FHR(n-1:nf)=linspace(FHR(n-1),FHR(nf),nf-n+2);
+        end
+        n=nf;
+    end
+
+    f=find(FHR>0&~isnan(FHR),1,'last');
+    FHR(f:end)=FHR(f);
+end
+
+
+% Set to max of the two
+FHR=max([FHR1;FHR2]);
+
+FHR=removesmallpart(FHR);
+d=find(FHR>0,1);
+
+[FHRi,d,f]=interpolFHR(FHR);
+
+FHR(FHR==0)=NaN;
+
+% -----------------------------------------------------------------------------
 % Process using the Maeda function in FHRMA
 % -----------------------------------------------------------------------------
+
 function y=avgsubsamp(x,factor)
     y=zeros(1,floor(length(x)/factor));
     for i=1:length(y)
         y(i)=mean(x((i-1)*factor+1:i*factor));
     end
 end
+
+
+function baseline=maedabaseline(FHR)
 
 sFHR=avgsubsamp(FHR,8);
 baseline=zeros(1,length(FHR));
@@ -60,14 +129,18 @@ end
 
 baseline(win*8+1201:length(FHR))=baseline(win*8+1200);
 
+end
+
 % -----------------------------------------------------------------------------
 % Show results
 % -----------------------------------------------------------------------------
 
-d = [true, diff(baseline) ~= 0, true]; % TRUE if values change
-n = diff(find(d)); % Number of repetitions
-d(end) = []; % Remove last element so matches dimensions
-reshape([baseline(d) n], 7, 2) % Combine into 2D array to show result
+baseline = maedabaseline(FHR);
+
+% d = [true, diff(baseline) ~= 0, true]; % TRUE if values change
+% n = diff(find(d)); % Number of repetitions
+% d(end) = []; % Remove last element so matches dimensions
+% reshape([baseline(d) n], 7, 2) % Combine into 2D array to show result
 
 % -----------------------------------------------------------------------------
 % Import the FHRMA baseline
@@ -159,3 +232,56 @@ end
 % -----------------------------------------------------------------------------
 
 [acc,dec,falseacc,falsedec]=simpleaddetection(FHR, baseline);
+
+% -----------------------------------------------------------------------------
+% Import all the FHRMA data and try to run baseline on all, recording if err
+% -----------------------------------------------------------------------------
+
+% Get current working directory
+currentdir = pwd;
+
+% Find all files that end with .fhr
+fhr_files = dir(fullfile('train_test_data', '**/*.fhr'));
+
+% Create empty lists to store results
+suceed = cell(0);
+fail = cell(0);
+
+% Loop through files
+for i = 1:length(fhr_files)
+
+  % Get file
+  fullpath = fullfile(fhr_files(i).folder, fhr_files(i).name);
+  relativepath = strrep(fullpath, currentdir, '')(2:end);
+
+  % Open file
+  f=fopen(relativepath, 'r');
+
+  % Load FHR data - first corresponds to first sensor, and
+  % second corresponds to second sensor (which they don't use)
+  data=fread(f,[3,10000000],'uint16');
+  FHR1=data(1,:)/4;
+  FHR2=data(2,:)/4;
+
+  % Close the file
+  fclose(f);
+
+  FHR=max([FHR1;FHR2]);
+
+  FHR=removesmallpart(FHR);
+  d=find(FHR>0,1);
+
+  [FHRi,d,f]=interpolFHR(FHR);
+
+  %FHR(FHR==0)=NaN;
+
+  % Try to find baseline - if it fails, catch the error
+  try
+    baseline = maedabaseline(FHRi);
+    %suceed(end+1) = fhr_files(i).name;
+  catch
+    % If an error occurs, save record name to list
+    fail(end+1) = fhr_files(i).name;
+  end_try_catch
+
+end
