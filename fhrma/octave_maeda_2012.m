@@ -75,7 +75,7 @@ reshape([baseline(d) n], 7, 2) % Combine into 2D array to show result
 % -----------------------------------------------------------------------------
 
 % Load the baseline data (and accelerations and decelerations)
-% struct = load('MD_std.mat');
+struct = load('MD_std.mat');
 
 % Extract the test01 baseline
 % md_base = struct.data(91).baseline;
@@ -118,14 +118,12 @@ while ~isempty(peaks)
     if isempty(dacc)
         dacc=1;
     end
-    disp(dacc)
 
     % Then, from the point after dacc to the end, find the first index below 0
     facc=find(sig(dacc+1:end)<0,1,'first')+dacc;
     if isempty(facc)
         facc=length(sig);
     end
-    disp(facc)
 
     % Between those two points, find index of the maximum (i.e. furthest from
     % baseline) (e.g. highest above baseline, for accelerations)
@@ -135,7 +133,10 @@ while ~isempty(peaks)
     % If length of the interval between the two points is greater than 15 secs
     if facc-dacc>15*4
         % Save the max, start and end to accident sample
-        accidentsample=[accidentsample [dacc;facc;macc]/4];
+        % Divide by 4 to get time in seconds
+        % Divide by 60 to get time in minutes (not in their function but is in
+        % their results)
+        accidentsample=[accidentsample [dacc;facc;macc]/4/60];
     end
     % Filter peaks to those that fall after the interval explored above
     peaks=peaks(peaks>facc);
