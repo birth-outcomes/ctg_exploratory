@@ -10,7 +10,7 @@ clear;
 % -----------------------------------------------------------------------------
 
 % Set filename
-filename='train_test_data/traindata_fhr/train42';
+filename='train_test_data/traindata_fhr/train01';
 
 % Open file
 f=fopen([filename, '.fhr'], 'r');
@@ -67,4 +67,94 @@ baseline(win*8+1201:length(FHR))=baseline(win*8+1200);
 d = [true, diff(baseline) ~= 0, true]; % TRUE if values change
 n = diff(find(d)); % Number of repetitions
 d(end) = []; % Remove last element so matches dimensions
-reshape([baseline(d) n], 4, 2) % Combine into 2D array to show result
+reshape([baseline(d) n], 7, 2) % Combine into 2D array to show result
+
+% -----------------------------------------------------------------------------
+% Import the FHRMA baseline
+% (if want to use that rather than calculated above)
+% -----------------------------------------------------------------------------
+
+% Load the baseline data (and accelerations and decelerations)
+% struct = load('MD_std.mat');
+
+% Extract the test01 baseline
+% md_base = struct.data(91).baseline;
+% md_acc = struct.data(91).accelerations;
+% md_dec = struct.data(91).decelerations;
+% md_file = struct.data(91).filename;
+
+% -----------------------------------------------------------------------------
+% Define function for acceleration and deceleration detection
+% -----------------------------------------------------------------------------
+
+function [acc,dec,falseacc,falsedec]=simpleaddetection(fhr,baseline)
+
+acc=detectaccident(fhr-baseline,15);
+dec=detectaccident(baseline-fhr,15);
+falseacc=minusint(acc,detectaccident(fhr-baseline,5));
+falsedec=minusint(dec,detectaccident(baseline-fhr,5));
+end
+
+function accidentsample=detectaccident(sig,thre)
+
+% Find points where the difference between signal and baseline is past threshold
+peaks=find(sig>thre);
+% Create empty (3x0) array of zeros
+accidentsample=zeros(3,0);
+% Whilst there are points in peaks
+while ~isempty(peaks)
+
+    % Get points from sig up to the first peak, and set to 1 if less than 0
+
+    % Being more than zero means it is over the baseline (in the direction we
+    % are looking at) - e.g. acceleration, FHR-baseline, so FHR 140 baseline 135
+    % would be result of 5, whilst FHR 130 baseline 135 would be -5.
+    % Find the last indice of a non-zero point
+
+    % So, in the signal before the peak, find the last point where it is < 0
+    % (or, for accelerations eg., FHR is below the baseline)
+    dacc=find(sig(1:peaks(1))<0,1,'last');
+    % If there is no point below 0, set to 1
+    if isempty(dacc)
+        dacc=1;
+    end
+    disp(dacc)
+
+    % Then, from the point after dacc to the end, find the first index below 0
+    facc=find(sig(dacc+1:end)<0,1,'first')+dacc;
+    if isempty(facc)
+        facc=length(sig);
+    end
+    disp(facc)
+
+    % Between those two points, find index of the maximum (i.e. furthest from
+    % baseline) (e.g. highest above baseline, for accelerations)
+    [~,macc]=max(sig(dacc:facc));
+    % Convert that to index in the actual signal
+    macc=macc+dacc-1;
+    % If length of the interval between the two points is greater than 15 secs
+    if facc-dacc>15*4
+        % Save the max, start and end to accident sample
+        accidentsample=[accidentsample [dacc;facc;macc]/4];
+    end
+    % Filter peaks to those that fall after the interval explored above
+    peaks=peaks(peaks>facc);
+end
+end
+
+function f=minusint(a,f)
+
+for i=1:size(a,2)
+    n=find(f(1,:)>=a(1,i) &f(2,:)<=a(2,i));
+    if ~isempty(n)
+        f=f(:,[1:n-1 n+1:end]);
+    end
+end
+
+end
+
+% -----------------------------------------------------------------------------
+% Apply function
+% -----------------------------------------------------------------------------
+
+[acc,dec,falseacc,falsedec]=simpleaddetection(FHR, baseline);
