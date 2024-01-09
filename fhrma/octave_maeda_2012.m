@@ -6,90 +6,15 @@
 clear;
 
 % -----------------------------------------------------------------------------
-% Import the data
+% Import and pre-process
 % -----------------------------------------------------------------------------
 
-% Set filename
-filename='train_test_data/traindata_fhr/train01';
+filename='train_test_data/traindata_fhr/train40';
 
-% Open file
-f=fopen([filename, '.fhr'], 'r');
+octave_import_preprocess
 
-% Load timestamp for beginning of recording
-timestamp=fread(f,1,'uint32');
-
-% Load FHR data - first corresponds to first sensor, and
-% second corresponds to second sensor (which they don't use)
-data=fread(f,[3,10000000],'uint16');
-FHR1=data(1,:)/4;
-FHR2=data(2,:)/4;
-
-% Close the file
-fclose(f);
-
-% -----------------------------------------------------------------------------
-% Pre-process
-% -----------------------------------------------------------------------------
-
-function FHR=removesmallpart(FHR)
-    FHR(FHR>220|FHR<50)=0;
-    n=find(FHR(1:end-1)==0 & FHR(2:end)>0)+1;
-    for i=1:length(n)
-        f=find(FHR(n(i):end)==0,1,'first');
-        if f<5*4
-        	FHR(n(i):n(i)+f)=0;
-        end
-    end
-    n=find(FHR(1:end-1)==0 & FHR(2:end)>0)+1;
-    for i=1:length(n)
-        f=find(FHR(n(i):end)==0,1,'first');
-        if f<30*4
-
-            lastvalid=find(FHR(1:n(i)-1)>0,1,'last');
-            nextvalid=find(FHR(n(i)+f:end)>0,1,'first')+n(i)+f-1;
-
-            try
-                if(  (FHR(n(i))-FHR(lastvalid)<-25 && FHR(n(i)+f-2)-FHR(nextvalid)<-25 ))
-                    FHR(n(i):n(i)+f)=0;
-                end
-                if(  (FHR(n(i))-FHR(lastvalid)>25 && FHR(n(i)+f-2)-FHR(nextvalid)>25 ))
-                    FHR(n(i):n(i)+f)=0;
-                end
-            catch
-            end
-        end
-    end
-
-end
-
-
-function [FHR,d,f]=interpolFHR(FHR)
-    n=find(FHR>0 & ~isnan(FHR),1);
-    FHR(1:n)=FHR(n);
-    d=n;
-    while ~isempty(n) && n<length(FHR)
-        n=find(FHR(n:end)==0|isnan(FHR(n:end)),1)+n-1;
-        nf=find(FHR(n:end)>0&~isnan(FHR(n:end)),1)+n-1;
-        if(~isempty(nf))
-            FHR(n-1:nf)=linspace(FHR(n-1),FHR(nf),nf-n+2);
-        end
-        n=nf;
-    end
-
-    f=find(FHR>0&~isnan(FHR),1,'last');
-    FHR(f:end)=FHR(f);
-end
-
-
-% Set to max of the two
-FHR=max([FHR1;FHR2]);
-
-FHR=removesmallpart(FHR);
-d=find(FHR>0,1);
-
-[FHRi,d,f]=interpolFHR(FHR);
-
-FHR(FHR==0)=NaN;
+% To simplify the workspace, remove all variables except FHR
+clearvars -except FHR;
 
 % -----------------------------------------------------------------------------
 % Process using the Maeda function in FHRMA
@@ -137,10 +62,12 @@ end
 
 baseline = maedabaseline(FHR);
 
-% d = [true, diff(baseline) ~= 0, true]; % TRUE if values change
-% n = diff(find(d)); % Number of repetitions
-% d(end) = []; % Remove last element so matches dimensions
-% reshape([baseline(d) n], 7, 2) % Combine into 2D array to show result
+%{
+d = [true, diff(baseline) ~= 0, true]; % TRUE if values change
+n = diff(find(d)); % Number of repetitions
+d(end) = []; % Remove last element so matches dimensions
+reshape([baseline(d) n], 7, 2) % Combine into 2D array to show result
+%}
 
 % -----------------------------------------------------------------------------
 % Import the FHRMA baseline
@@ -151,10 +78,12 @@ baseline = maedabaseline(FHR);
 struct = load('MD_std.mat');
 
 % Extract the test01 baseline
-% md_base = struct.data(91).baseline;
-% md_acc = struct.data(91).accelerations;
-% md_dec = struct.data(91).decelerations;
-% md_file = struct.data(91).filename;
+%{
+md_base = struct.data(91).baseline;
+md_acc = struct.data(91).accelerations;
+md_dec = struct.data(91).decelerations;
+md_file = struct.data(91).filename;
+%}
 
 % -----------------------------------------------------------------------------
 % Define function for acceleration and deceleration detection
@@ -232,11 +161,13 @@ end
 % -----------------------------------------------------------------------------
 
 [acc,dec,falseacc,falsedec]=simpleaddetection(FHR, baseline);
+test_facc = detectaccident(FHR-baseline,5);
 
 % -----------------------------------------------------------------------------
 % Import all the FHRMA data and try to run baseline on all, recording if err
 % -----------------------------------------------------------------------------
 
+%{
 % Get current working directory
 currentdir = pwd;
 
@@ -285,3 +216,4 @@ for i = 1:length(fhr_files)
   end_try_catch
 
 end
+%}
