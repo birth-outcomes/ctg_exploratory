@@ -121,7 +121,7 @@ function FHR=process(FHR1, FHR2)
   while ~isempty(n) && n<length(FHR)
     % Get index of first occurence after n that is zero or NaN
     n=find(FHR(n:end)==0|isnan(FHR(n:end)),1)+n-1;
-    % Get index of first occurence after that new n, that is non-zero or non-NaN
+    % Get index of first occurence after that new n, that is non-zero and non-NaN
     nf=find(FHR(n:end)>0&~isnan(FHR(n:end)),1)+n-1;
     % If you have found a subsequent value that is non-zero or non-NaN...
     if(~isempty(nf))
