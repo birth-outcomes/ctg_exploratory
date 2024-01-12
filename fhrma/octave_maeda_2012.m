@@ -9,7 +9,7 @@ clear;
 % Import and pre-process
 % -----------------------------------------------------------------------------
 
-filename='train_test_data/traindata_fhr/train21.fhr';
+filename='train_test_data/traindata_fhr/train44.fhr';
 
 octave_import_preprocess
 [FHR1, FHR2] = import_fhr(filename);
@@ -38,10 +38,6 @@ baseline=zeros(1,length(FHR));
 % For loop of values of 0, 150, 300, 450...
 for win=[0:150:length(sFHR)-151 length(sFHR)-150]
 
-    % disp(win)
-    % Not used, just extracted to support comparison to Python results
-    % current = sFHR(win+1:win+150)
-
     bins=zeros(1,25);
 
     for i=1:150
@@ -67,6 +63,7 @@ baseline = maedabaseline(FHR);
 d = [true, diff(baseline) ~= 0, true]; % TRUE if values change
 n = diff(find(d)); % Number of repetitions
 d(end) = []; % Remove last element so matches dimensions
+format short g % set display format
 reshape([baseline(d) n], length(n), 2) % Combine into 2D array to show result
 
 % -----------------------------------------------------------------------------
@@ -167,16 +164,11 @@ test_facc = detectaccident(FHR-baseline,5);
 % Import all the FHRMA data and try to run baseline on all, recording if err
 % -----------------------------------------------------------------------------
 
-%{
 % Get current working directory
 currentdir = pwd;
 
 % Find all files that end with .fhr
 fhr_files = dir(fullfile('train_test_data', '**/*.fhr'));
-
-% Create empty lists to store results
-suceed = cell(0);
-fail = cell(0);
 
 % Loop through files
 for i = 1:length(fhr_files)
@@ -185,35 +177,16 @@ for i = 1:length(fhr_files)
   fullpath = fullfile(fhr_files(i).folder, fhr_files(i).name);
   relativepath = strrep(fullpath, currentdir, '')(2:end);
 
-  % Open file
-  f=fopen(relativepath, 'r');
+  % Import and pre-process file
+  [FHR1, FHR2] = import_fhr(relativepath);
+  FHR = process(FHR1, FHR2);
 
-  % Load FHR data - first corresponds to first sensor, and
-  % second corresponds to second sensor (which they don't use)
-  data=fread(f,[3,10000000],'uint16');
-  FHR1=data(1,:)/4;
-  FHR2=data(2,:)/4;
+  % Calculate baseline
+  baseline = maedabaseline(FHR);
 
-  % Close the file
-  fclose(f);
-
-  FHR=max([FHR1;FHR2]);
-
-  FHR=removesmallpart(FHR);
-  d=find(FHR>0,1);
-
-  [FHRi,d,f]=interpolFHR(FHR);
-
-  %FHR(FHR==0)=NaN;
-
-  % Try to find baseline - if it fails, catch the error
-  try
-    baseline = maedabaseline(FHRi);
-    %suceed(end+1) = fhr_files(i).name;
-  catch
-    % If an error occurs, save record name to list
-    fail(end+1) = fhr_files(i).name;
-  end_try_catch
+  % Make save path and save to csv
+  [path, name, ext] = fileparts(relativepath);
+  csvpath = ['train_test_data/maeda_octave/' name '.csv'];
+  dlmwrite(csvpath, transpose(FHR), 'precision', '%.14f');
 
 end
-%}
