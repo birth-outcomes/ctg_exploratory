@@ -9,9 +9,11 @@ clear;
 % Import and pre-process
 % -----------------------------------------------------------------------------
 
-filename='train_test_data/traindata_fhr/train40';
+filename='train_test_data/traindata_fhr/train21.fhr';
 
 octave_import_preprocess
+[FHR1, FHR2] = import_fhr(filename);
+FHR = process(FHR1, FHR2);
 
 % To simplify the workspace, remove all variables except FHR
 clearvars -except FHR;
@@ -62,12 +64,10 @@ end
 
 baseline = maedabaseline(FHR);
 
-%{
 d = [true, diff(baseline) ~= 0, true]; % TRUE if values change
 n = diff(find(d)); % Number of repetitions
 d(end) = []; % Remove last element so matches dimensions
-reshape([baseline(d) n], 7, 2) % Combine into 2D array to show result
-%}
+reshape([baseline(d) n], length(n), 2) % Combine into 2D array to show result
 
 % -----------------------------------------------------------------------------
 % Import the FHRMA baseline
