@@ -15,7 +15,6 @@ for i = 1:length(train_files)
     name = erase(file, '.fhr')
     csvpath = ['train_test_data/traindata_octave_csv/' name '.csv'];
     % Save to csv
-    %csvwrite(csvpath, transpose(FHR));
     dlmwrite(csvpath, transpose(FHR), 'precision', '%.14f');
 end
 
@@ -28,6 +27,5 @@ for i = 1:length(test_files)
     FHR = process(FHR1, FHR2);
     name = erase(file, '.fhr')
     csvpath = ['train_test_data/testdata_octave_csv/' name '.csv'];
-    %csvwrite(csvpath, transpose(FHR));
     dlmwrite(csvpath, transpose(FHR), 'precision', '%.14f');
 end

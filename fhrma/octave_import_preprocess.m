@@ -70,6 +70,7 @@ function FHR=process(FHR1, FHR2)
   % Location of firstvalid:
   % - - - - - - - - - - - - - - - - - - - - - - - - - - ! - - - - -
 
+  n=find(FHR(1:end-1)==0 & FHR(2:end)>0)+1;
   for i=1:length(n)
      % As above, find first occurence of 0 after a non-zero section (f)
      f=find(FHR(n(i):end)==0,1,'first');
