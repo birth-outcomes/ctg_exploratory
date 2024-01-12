@@ -187,6 +187,6 @@ for i = 1:length(fhr_files)
   % Make save path and save to csv
   [path, name, ext] = fileparts(relativepath);
   csvpath = ['train_test_data/maeda_octave/' name '.csv'];
-  dlmwrite(csvpath, baseline, 'precision', '%.14f');
+  dlmwrite(csvpath, transpose(baseline), 'precision', '%.14f');
 
 end
