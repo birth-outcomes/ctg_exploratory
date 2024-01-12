@@ -1,29 +1,31 @@
+% This file uses the MATLAB code provided in the FHRMA toolbox to find
+% baseline FHR with the methodology from Maeda et al. 2012.
+
 clear;
 
-% Set filename
-filename='train_test_data/testdata_fhr/test01';
+% Get list of all files in training data and loop through them
+train_path = 'train_test_data/traindata_fhr';
+train_files = dir([train_path '/*.fhr']);
+for i = 1:length(train_files)
+    file = train_files(i).name;
+    % Import file and pre-process
+    [FHR1, FHR2] = import_fhr([train_path '/' file]);
+    FHR = process(FHR1, FHR2);
+    % Get the file name seperate to the file path, and create csv path
+    name = erase(file, '.fhr')
+    csvpath = ['train_test_data/traindata_octave_csv/' name '.csv'];
+    % Save to csv
+    dlmwrite(csvpath, transpose(FHR), 'precision', '%.14f');
+end
 
-% Open file
-f=fopen([filename, '.fhr'], 'r');
-
-% Load timestamp for beginning of recording
-timestamp=fread(f,1,'uint32');
-
-% Load FHR data - first corresponds to first sensor, and
-% second corresponds to second sensor (which they don't use)
-data=fread(f,[3,10000000],'uint16');
-FHR1=data(1,:)/4;
-FHR2=data(2,:)/4;
-
-fseek(f,4,'bof');
-
-% TOCO signal
-data=fread(f,[6,10000000],'uint8');
-TOCO=data(5,:)/2;
-
-MHR=zeros(size(FHR1));
-infos=[];
-fclose(f);
-
-% Save FHR1 to a file for use in python
-csvwrite([filename, '.csv'], transpose(FHR1));
+% Repeat for the test files
+test_path = 'train_test_data/testdata_fhr';
+test_files = dir([test_path '/*.fhr']);
+for i = 1:length(test_files)
+    file = test_files(i).name;
+    [FHR1, FHR2] = import_fhr([test_path '/' file]);
+    FHR = process(FHR1, FHR2);
+    name = erase(file, '.fhr')
+    csvpath = ['train_test_data/testdata_octave_csv/' name '.csv'];
+    dlmwrite(csvpath, transpose(FHR), 'precision', '%.14f');
+end
