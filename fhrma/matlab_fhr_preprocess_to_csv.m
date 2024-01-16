@@ -22,6 +22,6 @@ for i=1:156
     name = erase(data(i).filename, '.fhr')
     
     % Save results to a csv file
-    writematrix(FHRi, ['/home/amy/Documents/ctg_exploratory/fhrma/train_test_data/matlab_csv/' name '.csv']);
+    writematrix(transpose(FHRi), ['/home/amy/Documents/ctg_exploratory/fhrma/train_test_data/matlab_csv/' name '.csv']);
     
 end
