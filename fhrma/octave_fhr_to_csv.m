@@ -3,6 +3,8 @@
 
 clear;
 
+octave_import_preprocess;
+
 % Get list of all files in training data and loop through them
 train_path = 'train_test_data/traindata_fhr';
 train_files = dir([train_path '/*.fhr']);
