@@ -3,14 +3,15 @@
 % as I have been unable to exactly replicate their results in Python, but it is
 % unclear why this is the case.
 
-% Run 12_fhrma_octave_import_preprocess.m first
+clear;
 
 % -----------------------------------------------------------------------------
 % Import and pre-process
 % -----------------------------------------------------------------------------
 
-filename='fhrma/train_test_data/traindata_fhr/train44.fhr';
+filename='train_test_data/traindata_fhr/train44.fhr';
 
+octave_import_preprocess
 [FHR1, FHR2] = import_fhr(filename);
 FHR = process(FHR1, FHR2);
 
@@ -71,7 +72,7 @@ reshape([baseline(d) n], length(n), 2) % Combine into 2D array to show result
 % -----------------------------------------------------------------------------
 
 % Load the baseline data (and accelerations and decelerations)
-struct = load('fhrma/MD_std.mat');
+struct = load('MD_std.mat');
 
 % Extract the test01 baseline
 %{
@@ -167,7 +168,7 @@ test_facc = detectaccident(FHR-baseline,5);
 currentdir = pwd;
 
 % Find all files that end with .fhr
-fhr_files = dir(fullfile('fhrma/train_test_data', '**/*.fhr'));
+fhr_files = dir(fullfile('train_test_data', '**/*.fhr'));
 
 % Loop through files
 for i = 1:length(fhr_files)
@@ -185,7 +186,7 @@ for i = 1:length(fhr_files)
 
   % Make save path and save to csv
   [path, name, ext] = fileparts(relativepath);
-  csvpath = ['fhrma/train_test_data/maeda_octave/' name '.csv'];
+  csvpath = ['train_test_data/maeda_octave/' name '.csv'];
   dlmwrite(csvpath, transpose(baseline), 'precision', '%.14f');
 
 end
