@@ -5,29 +5,33 @@ clear;
 
 octave_import_preprocess;
 
-% Get list of all files in training data and loop through them
-train_path = 'train_test_data/traindata_fhr';
-train_files = dir([train_path '/*.fhr']);
-for i = 1:length(train_files)
-    file = train_files(i).name;
-    % Import file and pre-process
-    [FHR1, FHR2] = import_fhr([train_path '/' file]);
-    FHR = process(FHR1, FHR2);
+% Load expert analyses file
+load expertAnalyses.mat
+
+% Go through all 156, setting to correct filepath depending on train vs test
+for i=1:156
+    if i<=90
+        f='train_test_data/testdata_fhr';
+    else
+        f='train_test_data/traindata_fhr';
+    end
+
+    % Get filename from the files in the expert analysis file
+    file = data(i).filename;
+
+    % Import file
+    [FHR1, FHR2] = import_fhr([f '/' file]);
+
+    % Identify any record of unreliable signal
+    unreliable = data(i).unreliableSignal;
+
+    % Process the signal
+    FHR = process(FHR1, FHR2, unreliable);
+
     % Get the file name seperate to the file path, and create csv path
     name = erase(file, '.fhr')
     csvpath = ['train_test_data/traindata_octave_csv/' name '.csv'];
-    % Save to csv
-    dlmwrite(csvpath, transpose(FHR), 'precision', '%.14f');
-end
 
-% Repeat for the test files
-test_path = 'train_test_data/testdata_fhr';
-test_files = dir([test_path '/*.fhr']);
-for i = 1:length(test_files)
-    file = test_files(i).name;
-    [FHR1, FHR2] = import_fhr([test_path '/' file]);
-    FHR = process(FHR1, FHR2);
-    name = erase(file, '.fhr')
-    csvpath = ['train_test_data/testdata_octave_csv/' name '.csv'];
+    % Save to csv
     dlmwrite(csvpath, transpose(FHR), 'precision', '%.14f');
 end

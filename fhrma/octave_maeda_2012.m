@@ -6,10 +6,10 @@
 clear;
 
 % -----------------------------------------------------------------------------
-% Import and pre-process
+% Import and pre-process an example
 % -----------------------------------------------------------------------------
 
-filename='train_test_data/traindata_fhr/train44.fhr';
+filename='train_test_data/traindata_fhr/train46.fhr';
 
 octave_import_preprocess
 [FHR1, FHR2] = import_fhr(filename);
@@ -36,6 +36,8 @@ sFHR=avgsubsamp(FHR,8);
 baseline=zeros(1,length(FHR));
 
 % For loop of values of 0, 150, 300, 450...
+% Except the penultimate value, which is for a section as short as needed to
+% ensure that the final section is 150 long
 for win=[0:150:length(sFHR)-151 length(sFHR)-150]
 
     bins=zeros(1,25);
