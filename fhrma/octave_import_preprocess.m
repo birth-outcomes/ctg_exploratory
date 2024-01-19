@@ -29,15 +29,21 @@ end
 % Pre-process
 % This was performed with a series of functions, so I have sectioned to show
 % which code is from which function
-% Note: Missing unreliableSignal, Maeda only has FHRMA result with _std which
-% doesn't include unreliableSignal and only has filename, baseline, acc and dec
 % -----------------------------------------------------------------------------
 
-function FHR=process(FHR1, FHR2)
+function FHR=process(FHR1, FHR2, unreliable)
   % From preprocess()...
 
   % Set to max of the two
   FHR=max([FHR1;FHR2]);
+
+  for j=1:size(unreliable,1)
+      disp(round(unreliable(j,1)*240+1))
+      disp(round(unreliable(j,2)*240))
+      disp(FHR(round(unreliable(j,1)*240+1):round(unreliable(j,2)*240)));
+      FHR(round(unreliable(j,1)*240+1):round(unreliable(j,2)*240))=0;
+      disp(FHR(round(unreliable(j,1)*240+1):round(unreliable(j,2)*240)));
+  end
 
   % From removesmallpart()...
 
