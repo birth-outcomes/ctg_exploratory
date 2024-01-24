@@ -5,9 +5,9 @@ This repository aims to understand and explore how the fetal heart rate (FHR) an
 * Continuous wavelet transform (CWT)
 * Convolutional neural nets (CNN)
 
-We've used data from the CTU-CHB Intrapartum Cardiotocography Database
+We've used data from the CTU-UHB Intrapartum Cardiotocography Database.
 
-## CTU-CHB Intrapartum Cardiotocography Database
+## CTU-UHB Intrapartum Cardiotocography Database
 
 ### CTG data (with accompanying maternal information)
 
